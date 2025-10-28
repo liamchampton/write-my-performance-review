@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Impact Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Add Activity Form -->
+        <section class="add-activity-section">
+            <div class="section-header-with-stats">
+                <h2>➕ Add New Activity</h2>
+                <!-- Statistics Dashboard -->
+                <div id="stats-container" class="stats-grid-inline">
+                    <div class="stat-card-inline">
+                        <div class="stat-number" id="total-activities">0</div>
+                        <div class="stat-label">Activities</div>
+                    </div>
+                    <div class="stat-card-inline">
+                        <div class="stat-number" id="total-categories">0</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Impact Framework Graphic -->
+            <div class="impact-framework">
+                <h3>Impact is <span class="highlight-what">what</span> you accomplish - and <span class="highlight-how">how</span> you do it matters just as much.</h3>
+                <div class="impact-visual">
+                    <div class="impact-text impact-what">
+                        <strong>WHAT</strong>
+                        <p>What results have you delivered for your goals, keeping security, quality, and AI in mind?</p>
+                    </div>
+                    <div class="impact-circle-graphic">
+                        <svg viewBox="0 0 200 200" class="impact-svg">
+                            <!-- Outer circle -->
+                            <circle cx="100" cy="100" r="90" fill="url(#gradient1)" stroke="#fff" stroke-width="3"/>
+                            
+                            <!-- Inner circle -->
+                            <circle cx="100" cy="100" r="65" fill="url(#gradient2)"/>
+                            
+                            <!-- Arrows -->
+                            <path d="M 100 35 Q 130 50 140 80" stroke="#fff" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                            <path d="M 100 165 Q 70 150 60 120" stroke="#fff" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                            
+                            <!-- Text -->
+                            <text x="100" y="80" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">What you</text>
+                            <text x="100" y="95" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">achieved</text>
+                            
+                            <text x="100" y="125" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">How you</text>
+                            <text x="100" y="140" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">achieved it</text>
+                            
+                            <!-- Gradients -->
+                            <defs>
+                                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#7FBA00;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#00A4A6;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00594C;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#004B50;stop-opacity:1" />
+                                </linearGradient>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#fff" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="impact-text impact-how">
+                        <strong>HOW</strong>
+                        <p>How have your behaviors and actions led you, your team and Microsoft to excel, grow, and build trust?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <form id="activity-form">
+                <div class="form-group">
+                    <label for="title">Activity Title *</label>
+                    <input type="text" id="title" name="title" required 
+                           placeholder="e.g., Delivered Azure workshop at Microsoft Build">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Briefly describe the activity and impact *</label>
+                    <textarea id="description" name="description" rows="3" 
+                              placeholder="Provide details about the activity and its impact..."></textarea>
+                </div>
+
+                <div class="form-group" id="ai-summary-section" style="display: none;">
+                    <label for="ai-summary">AI-Generated Summary</label>
+                    <div id="ai-summary" class="ai-summary-box"></div>
+                    <small class="form-help">This summary was generated by Foundry Local AI</small>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" id="generate-summary-btn" class="btn btn-ai">
+                        🤖 Generate AI Summary
+                    </button>
+                    <small class="form-help ai-help" style="display: none;">AI summary will appear above after generation</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tags">Tags (comma-separated)</label>
+                    <input type="text" id="tags" name="tags" 
+                           placeholder="e.g., Azure, AI, Community">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Add Activity</button>
+
+            </form>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <h2 class="collapsible-header" onclick="toggleFilterSection()">
+                🔍 Filter Activities
+                <span class="collapse-icon">▶</span>
+            </h2>
+            <div class="filter-controls" id="filter-content" style="display: none;">
+                <div class="form-group">
+                    <label for="filter-category">Filter by Category</label>
+                    <select id="filter-category">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <button id="clear-filters" class="btn btn-secondary">Clear Filters</button>
+            </div>
+        </section>
+
+        <!-- Activities List -->
+        <section class="activities-section">
+            <h2 class="collapsible-header" onclick="toggleActivitiesSection()">
+                📋 Your Activities
+                <span class="collapse-icon">▶</span>
+            </h2>
+            <div id="all-activities" class="activities-list" style="display: none;">
+                <!-- Activities will be populated here -->
+            </div>
+        </section>
+
+        <!-- Performance Review Summary Section -->
+        <section class="performance-review-section">
+            <h2 class="collapsible-header" onclick="togglePerformanceSection()">
+                📊 Performance Review Summary
+                <span class="collapse-icon">▶</span>
+            </h2>
+            <div id="performance-review-content" style="display: none;">
+                <p class="section-description">Generate a comprehensive summary of all your activities for performance reviews</p>
+                <button id="generate-review-summary-btn" class="btn btn-primary">
+                    🤖 Generate Performance Review Summary
+                </button>
+                <div id="review-summary-section" style="display: none;">
+                    <div class="review-summary-box">
+                        <div class="review-summary-header">
+                            <h3>Performance Review Summary</h3>
+                            <button id="copy-review-btn" class="btn btn-secondary">📋 Copy to Clipboard</button>
+                        </div>
+                        <div id="review-summary-content" class="review-summary-content"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

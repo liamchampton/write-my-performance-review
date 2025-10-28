@@ -1,0 +1,25 @@
+services:
+  connect-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: connect-activity-tracker
+    ports:
+      - "8080:8080"
+    environment:
+      # Azure AI Foundry Configuration
+      - AZURE_AI_FOUNDRY_ENDPOINT=${AZURE_AI_FOUNDRY_ENDPOINT}
+      - AZURE_AI_FOUNDRY_KEY=${AZURE_AI_FOUNDRY_KEY}
+      - AZURE_AI_FOUNDRY_MODEL=${AZURE_AI_FOUNDRY_MODEL}
+    volumes:
+      # Mount data directory for persistent storage
+      - ./data:/app/data
+      # Optionally mount the JSON file directly
+      - ./activities_data.json:/app/activities_data.json
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
