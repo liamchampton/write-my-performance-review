@@ -5,7 +5,26 @@ const API_BASE_URL = '/api';
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
+    initializeThemeToggle();
 });
+
+// Theme Toggle Functionality
+function initializeThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    
+    // Apply saved theme
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    }
+    
+    // Toggle theme on click
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        localStorage.setItem('theme', currentTheme);
+    });
+}
 
 async function initializeApp() {
     await loadCategories();
